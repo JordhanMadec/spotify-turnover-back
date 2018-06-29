@@ -1,11 +1,24 @@
 {
-  "author": "Spotify",
-  "name": "web-api-auth-examples",
-  "description": "Basic examples of the Spotify authorization flows through OAuth 2",
-  "version": "0.0.2",
+  "author": "Jordhan Madec",
+  "name": "spotify-turnover-api",
+  "description": "API for Spotify Turnover",
+  "repository": "https://github.com/JordhanMadec/spotify-turnover-api.git",
+  "private": true,
+  "version": "1.0",
+  "scripts": {
+    "start": "node app.js",
+    "deploy": "gcloud app deploy --project spotify-turnover-1530185667614",
+    "browse": "gcloud app browse"
+  },
+  "contributors": [
+    {
+      "name": "Jordhan Madec",
+      "email": "jordhan.madec@gmail.com"
+    }
+  ],
   "dependencies": {
     "@google-cloud/storage": "^1.7.0",
-    "cookie-parser": "1.3.2",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "~4.16.0",
     "querystring": "~0.2.0",
