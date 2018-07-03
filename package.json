@@ -4,9 +4,10 @@
   "description": "API for Spotify Turnover",
   "repository": "https://github.com/JordhanMadec/spotify-turnover-api.git",
   "private": true,
-  "version": "1.0",
+  "version": "1.0.0",
   "scripts": {
-    "start": "node app.js",
+    "start": "node -r dotenv/config app.js",
+    "start-dev": "node -r dotenv/config app.js dotenv_config_path=./.env.dev",
     "deploy": "gcloud app deploy --project spotify-turnover-1530185667614",
     "browse": "gcloud app browse"
   },
@@ -20,8 +21,10 @@
     "@google-cloud/storage": "^1.7.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "~4.16.0",
     "querystring": "~0.2.0",
-    "request": "~2.83.0"
+    "request": "~2.83.0",
+    "spotify-web-api-node": "^3.1.1"
   }
 }
