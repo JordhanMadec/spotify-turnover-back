@@ -16,7 +16,7 @@ console.log("API_URL: ", process.env.API_URL);
 const STATE_KEY = 'spotify_auth_state',
     ACCESS_TOKEN = 'access_token',
     REFRESH_TOKEN = 'refresh_token',
-    REQUIRER_URI = 'requirer_uri';
+    REQUIRER_URI = 'requirer_uri'; // Requirer retrun uri
 
 // CREDENTIALS
 const SCOPES = ['user-read-private', 'user-read-email'],
@@ -103,12 +103,13 @@ myRouter.route('/login').get(function (req, res) {
     var state = generateRandomString(16);
     var authorizeURL = spotifyApi.createAuthorizeURL(SCOPES, state);
 
-    console.log('LOGIN_URL', authorizeURL);
-
-    // res.cookie(STATE_KEY, state);
+    // Save state
     var cookies = new Cookies(req, res);
     cookies.set(STATE_KEY, state);
-    cookies.set(REQUIRER_URI, '/#');
+
+    // Save requirer return uri passed as an option of the GET request
+    var requirer_uri = req.query.redirect_uri;
+    cookies.set(REQUIRER_URI, requirer_uri);
 
     res.redirect(authorizeURL);
 
@@ -220,32 +221,43 @@ myRouter.route('/refresh_token').get(function (req, res) {
  * Route /logout
  */
 myRouter.route('/logout').get(function (req, res) {
+    
+    console.log('GET', '/logout');
+
     spotifyApi.resetCredentials();
     res.clearCookie(ACCESS_TOKEN);
     res.clearCookie(REFRESH_TOKEN);
+
 });
 
 /**
  * Route /me
  */
 myRouter.route('/me').get(function (req, res) {
+
+    console.log('GET', '/me');
     
     var cookies = new Cookies(req, res);
+    var options = null;
 
     if (cookies.get(ACCESS_TOKEN) && cookies.get(REFRESH_TOKEN)) {
-        var access_token = cookies.get(ACCESS_TOKEN),
-            refresh_token = cookies.get(REFRESH_TOKEN);
-
-        var options = {
+        var access_token = cookies.get(ACCESS_TOKEN);
+            
+        options = {
             url: 'https://api.spotify.com/v1/me',
             headers: { 'Authorization': 'Bearer ' + access_token },
             json: true
         };
 
-        // use the access token to access the Spotify Web API
         request.get(options, function (error, response, body) {
             res.json(body);
         });
+    } else {
+        res.redirect(process.env.API_URL + '/login?' +
+            querystring.stringify({
+                redirect_uri: process.env.API_URL + '/me'
+            })
+        );
     }
 
 });
