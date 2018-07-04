@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node -r dotenv/config app.js",
-    "start-dev": "node -r dotenv/config app.js dotenv_config_path=./.env.dev",
+    "dev": "node -r dotenv/config app.js dotenv_config_path=./.env.dev",
     "deploy": "gcloud app deploy --project spotify-turnover-1530185667614",
     "browse": "gcloud app browse"
   },
@@ -20,6 +20,7 @@
   "dependencies": {
     "@google-cloud/storage": "^1.7.0",
     "cookie-parser": "^1.4.3",
+    "cookies": "^0.7.1",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "~4.16.0",
